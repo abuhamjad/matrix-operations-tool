@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import messagebox, filedialog
 import numpy as np
 
 
@@ -9,6 +9,7 @@ class MatrixTool:
         self.root.title("Matrix Operations Tool")
         self.root.geometry("800x700")
         self.root.resizable(False, False)
+        self.current_result = ""
 
         title = tk.Label(
             root,
@@ -76,10 +77,31 @@ class MatrixTool:
 
         tk.Button(
             btn_frame,
+            text="Inverse A",
+            width=15,
+            command=self.inverse_matrix
+        ).grid(row=1, column=2, padx=5, pady=5)
+
+        tk.Button(
+            btn_frame,
+            text="Rank A",
+            width=15,
+            command=self.rank_matrix
+        ).grid(row=2, column=0, padx=5, pady=5)
+
+        tk.Button(
+            btn_frame,
+            text="Save Result",
+            width=15,
+            command=self.save_result
+        ).grid(row=2, column=1, padx=5, pady=5)
+
+        tk.Button(
+            btn_frame,
             text="Clear",
             width=15,
             command=self.clear_all
-        ).grid(row=1, column=2, padx=5, pady=5)
+        ).grid(row=2, column=2, padx=5, pady=5)
 
         # Result Area
         tk.Label(root, text="Result", font=("Arial", 14, "bold")).pack()
@@ -109,7 +131,7 @@ class MatrixTool:
     def display_result(self, result):
         self.result_box.config(state="normal")
         self.result_box.delete("1.0", tk.END)
-        self.result_box.insert(tk.END, str(result))
+        self.result_box.insert(tk.END, self.current_result)
         self.result_box.config(state="disabled")
 
     def add_matrices(self):
@@ -175,6 +197,71 @@ class MatrixTool:
 
         except Exception as e:
             messagebox.showerror("Error", str(e))
+
+    def inverse_matrix(self):
+        try:
+            A = self.get_matrix(self.matrix_a)
+
+            # Check if matrix is square
+            if A.shape[0] != A.shape[1]:
+                raise ValueError(
+                    "Inverse can only be calculated for square matrices."
+                )
+
+            # Check if determinant is zero
+            if np.linalg.det(A) == 0:
+                raise ValueError(
+                    "Matrix is singular and has no inverse."
+                )
+
+            inverse = np.linalg.inv(A)
+
+            self.display_result(np.round(inverse, 2))
+
+        except Exception as e:
+            messagebox.showerror("Error", str(e))
+
+    def rank_matrix(self):
+        try:
+            A = self.get_matrix(self.matrix_a)
+
+            rank = np.linalg.matrix_rank(A)
+
+            self.display_result(f"Rank of Matrix A = {rank}")
+
+        except Exception as e:
+            messagebox.showerror("Error", str(e))
+
+    def save_result(self):
+        if not self.current_result:
+            messagebox.showwarning(
+                "No Result",
+                "Please perform an operation first."
+            )
+            return
+
+        file_path = filedialog.asksaveasfilename(
+            defaultextension=".txt",
+            filetypes=[
+                ("Text Files", "*.txt"),
+                ("All Files", "*.*")
+            ]
+        )
+
+        if file_path:
+            try:
+                with open(file_path, "w") as file:
+                    file.write("Matrix Operations Tool Result\n")
+                    file.write("=" * 35 + "\n\n")
+                    file.write(self.current_result)
+
+                messagebox.showinfo(
+                    "Success",
+                    "Result saved successfully!"
+                )
+
+            except Exception as e:
+                messagebox.showerror("Error", str(e))
 
     def clear_all(self):
         self.matrix_a.delete("1.0", tk.END)
