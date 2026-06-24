@@ -1,67 +1,129 @@
 # Matrix Operations Tool
 
-A Python-based interactive application that performs various matrix operations using NumPy.
+An interactive desktop application built with Python, NumPy, and Tkinter for performing various matrix operations through a user-friendly graphical interface.
 
 ## Features
 
-- Matrix Addition
-- Matrix Subtraction
-- Matrix Multiplication
-- Matrix Transpose
-- Determinant Calculation
-- Interactive Command Line Interface
-- Error Handling and Input Validation
+* Matrix Addition
+* Matrix Subtraction
+* Matrix Multiplication
+* Matrix Transpose
+* Determinant Calculation
+* Matrix Inverse
+* Matrix Rank Calculation
+* Automatic Matrix Dimension Detection
+* Save Results to Text File
+* Input Validation and Error Handling
+* Interactive GUI built with Tkinter
+* About Window with Application Information
 
 ## Technologies Used
 
-- Python
-- NumPy
+* Python 3
+* NumPy
+* Tkinter
+
+## Project Structure
+
+```text
+matrix-operations-tool/
+│
+├── src/
+│   └── matrix_gui.py
+│
+├── screenshots/
+│   ├── main_window.png
+│   ├── addition_result.png
+│   └── save_result.png
+│
+├── requirements.txt
+├── README.md
+├── LICENSE
+└── .gitignore
+```
 
 ## Installation
 
-1. Clone the repository:
+### Clone the Repository
 
 ```bash
-git clone https://github.com/abuhamjad/matrix-operations-tool.git
+git clone https://github.com/yourusername/matrix-operations-tool.git
 ```
 
-2. Navigate to project directory:
+### Navigate to the Project Directory
 
 ```bash
 cd matrix-operations-tool
 ```
 
-3. Install dependencies:
+### Create and Activate Virtual Environment (Optional)
+
+```bash
+python -m venv venv
+```
+
+Windows:
+
+```bash
+venv\Scripts\activate
+```
+
+Linux/macOS:
+
+```bash
+source venv/bin/activate
+```
+
+### Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## Run the Project
+## Run the Application
 
 ```bash
-python src/matrix_tool.py
+python src/matrix_gui.py
 ```
 
-## Example
+## Input Format
+
+Enter matrix values row-wise.
+
+Example:
 
 ```text
-===== MATRIX OPERATIONS TOOL =====
-1. Addition
-2. Subtraction
-3. Multiplication
-4. Transpose
-5. Determinant
-6. Exit
+1 2 3
+4 5 6
+7 8 9
 ```
+
+* Each row must be entered on a new line.
+* Elements in a row should be separated by spaces.
+* All rows must contain the same number of elements.
+
+## Screenshots
+
+### Main Application Window
+
+![Main Window](screenshots/main_window.png)
+
+### Matrix Addition Result
+
+![Addition Result](screenshots/addition_result.png)
+
+### Save Result Functionality
+
+![Save Result](screenshots/save_result.png)
+
 
 ## Future Enhancements
 
-- GUI version using Tkinter
-- Matrix Inverse operation
-- Eigenvalue and Eigenvector calculations
-- Save results to a file
+* Matrix Trace Calculation
+* Eigenvalue and Eigenvector Calculation
+* Export Results in CSV Format
+* Dark Theme Support
 
 ## Author
 
-Abu Huraira
+**Abu Huraira**

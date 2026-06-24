@@ -7,7 +7,7 @@ class MatrixTool:
     def __init__(self, root):
         self.root = root
         self.root.title("Matrix Operations Tool")
-        self.root.geometry("800x700")
+        self.root.geometry("900x900")
         self.root.resizable(False, False)
         self.current_result = ""
 
@@ -30,11 +30,20 @@ class MatrixTool:
             fg="gray"
         ).pack()
 
+        self.matrix_a.bind("<KeyRelease>", lambda e: self.update_dimensions())
+        self.dim_a_label = tk.Label(root, text="Dimensions: -", fg="blue")
+        self.dim_a_label.pack()
+
         # Matrix B
         tk.Label(root, text="Matrix B", font=("Arial", 14, "bold")).pack(pady=(20, 0))
 
         self.matrix_b = tk.Text(root, height=6, width=40)
         self.matrix_b.pack(pady=5)
+
+        self.matrix_b.bind("<KeyRelease>", lambda e: self.update_dimensions())
+
+        self.dim_b_label = tk.Label(root, text="Dimensions: -", fg="blue")
+        self.dim_b_label.pack()
 
         # Buttons Frame
         btn_frame = tk.Frame(root)
@@ -115,8 +124,18 @@ class MatrixTool:
         )
         self.result_box.pack(pady=10)
 
+        # Menu Bar
+        menu_bar = tk.Menu(self.root)
+        self.root.config(menu=menu_bar)
+
+        help_menu = tk.Menu(menu_bar, tearoff=0)
+        menu_bar.add_cascade(label="Help", menu=help_menu)
+
+        help_menu.add_command(label="About", command=self.show_about)
+
     def get_matrix(self, text_widget):
         try:
+            
             data = text_widget.get("1.0", tk.END).strip().split("\n")
 
             matrix = []
@@ -129,6 +148,9 @@ class MatrixTool:
             raise ValueError("Please enter valid numeric values.")
 
     def display_result(self, result):
+        
+        self.current_result = str(result)
+
         self.result_box.config(state="normal")
         self.result_box.delete("1.0", tk.END)
         self.result_box.insert(tk.END, self.current_result)
@@ -136,6 +158,7 @@ class MatrixTool:
 
     def add_matrices(self):
         try:
+            
             A = self.get_matrix(self.matrix_a)
             B = self.get_matrix(self.matrix_b)
 
@@ -149,6 +172,7 @@ class MatrixTool:
 
     def subtract_matrices(self):
         try:
+            
             A = self.get_matrix(self.matrix_a)
             B = self.get_matrix(self.matrix_b)
 
@@ -162,6 +186,7 @@ class MatrixTool:
 
     def multiply_matrices(self):
         try:
+            
             A = self.get_matrix(self.matrix_a)
             B = self.get_matrix(self.matrix_b)
 
@@ -177,6 +202,7 @@ class MatrixTool:
 
     def transpose_matrix(self):
         try:
+            
             A = self.get_matrix(self.matrix_a)
             self.display_result(A.T)
 
@@ -185,6 +211,7 @@ class MatrixTool:
 
     def determinant_matrix(self):
         try:
+            
             A = self.get_matrix(self.matrix_a)
 
             if A.shape[0] != A.shape[1]:
@@ -200,6 +227,7 @@ class MatrixTool:
 
     def inverse_matrix(self):
         try:
+            
             A = self.get_matrix(self.matrix_a)
 
             # Check if matrix is square
@@ -223,16 +251,26 @@ class MatrixTool:
 
     def rank_matrix(self):
         try:
+            
             A = self.get_matrix(self.matrix_a)
+            B = self.get_matrix(self.matrix_b)
 
-            rank = np.linalg.matrix_rank(A)
+            rank_a = np.linalg.matrix_rank(A)
+            rank_b = np.linalg.matrix_rank(B)
 
-            self.display_result(f"Rank of Matrix A = {rank}")
+            result = (
+                f"Rank of Matrix A = {rank_a}\n\n"
+                f"Rank of Matrix B = {rank_b}"
+            )
+
+            self.display_result(result)
 
         except Exception as e:
             messagebox.showerror("Error", str(e))
 
     def save_result(self):
+        
+        
         if not self.current_result:
             messagebox.showwarning(
                 "No Result",
@@ -264,12 +302,51 @@ class MatrixTool:
                 messagebox.showerror("Error", str(e))
 
     def clear_all(self):
+        
         self.matrix_a.delete("1.0", tk.END)
         self.matrix_b.delete("1.0", tk.END)
 
         self.result_box.config(state="normal")
         self.result_box.delete("1.0", tk.END)
         self.result_box.config(state="disabled")
+
+    def show_about(self):
+        about_text = (
+            "Matrix Operations Tool\n\n"
+            "Version: 2.1.0\n\n"
+            "Features:\n"
+            "• Addition\n"
+            "• Subtraction\n"
+            "• Multiplication\n"
+            "• Transpose\n"
+            "• Determinant\n"
+            "• Inverse\n"
+            "• Rank Calculation\n"
+            "• Save Results\n\n"
+            "Developed By:\n"
+            "Abu Huraira\n\n"
+            "Technologies Used:\n"
+            "Python, NumPy, Tkinter"
+        )
+
+        messagebox.showinfo("About", about_text)
+
+    def update_dimensions(self):
+        try:
+            A = self.get_matrix(self.matrix_a)
+            self.dim_a_label.config(
+                text=f"Matrix A Dimensions: {A.shape[0]} × {A.shape[1]}"
+            )
+        except:
+            self.dim_a_label.config(text="Matrix A Dimensions: Invalid")
+
+        try:
+            B = self.get_matrix(self.matrix_b)
+            self.dim_b_label.config(
+                text=f"Matrix B Dimensions: {B.shape[0]} × {B.shape[1]}"
+            )
+        except:
+            self.dim_b_label.config(text="Matrix B Dimensions: Invalid")
 
 
 if __name__ == "__main__":
